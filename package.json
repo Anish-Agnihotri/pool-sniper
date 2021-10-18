@@ -1,0 +1,38 @@
+{
+  "name": "pool-sniper",
+  "version": "1.0.0",
+  "description": "Snipes Uniswap V2 pools on creation",
+  "main": "dist/app.js",
+  "scripts": {
+    "postinstall": "patch-package",
+    "dev": "ts-node src/app.ts",
+    "start": "tsc && node dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "uniswap",
+    "v2",
+    "pool",
+    "sniper"
+  ],
+  "author": "Anish Agnihotri",
+  "license": "Unlicense",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^16.11.1",
+    "babel-eslint": "^10.1.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.2",
+    "patch-package": "^6.4.7",
+    "prettier": "^2.4.1",
+    "ts-node": "^10.3.0",
+    "typescript": "^4.4.4",
+    "winston": "^3.3.3"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ethers": "^5.4.7",
+    "simple-uniswap-sdk": "^3.4.2"
+  }
+}

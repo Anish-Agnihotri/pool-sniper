@@ -1,0 +1,444 @@
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.d.ts b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.d.ts
+index e73f225..5349038 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.d.ts
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.d.ts
+@@ -15,6 +15,7 @@ export declare class ETH {
+     static RINKEBY(): Token;
+     static GORLI(): Token;
+     static KOVAN(): Token;
++    static POLYGON(): Token;
+     /**
+      * Get ETH token info by chain id
+      * @param chainId The chain id
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.js b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.js
+index bf58a8b..c59d5b1 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.js
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/eth.js
+@@ -82,6 +82,15 @@ var ETH = /** @class */ (function () {
+             name: exports.ETH_NAME,
+         };
+     };
++    ETH.POLYGON = function () {
++        return {
++            chainId: chain_id_1.ChainId.POLYGON,
++            contractAddress: exports.appendEthToContractAddress('0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'),
++            decimals: 18,
++            symbol: exports.ETH_SYMBOL,
++            name: exports.ETH_NAME,
++        };
++    };
+     /**
+      * Get ETH token info by chain id
+      * @param chainId The chain id
+@@ -98,6 +107,8 @@ var ETH = /** @class */ (function () {
+                 return this.GORLI();
+             case chain_id_1.ChainId.KOVAN:
+                 return this.KOVAN();
++            case chain_id_1.ChainId.POLYGON:
++                return this.POLYGON();
+             default:
+                 throw new uniswap_error_1.UniswapError(chainId + " is not allowed", error_codes_1.ErrorCodes.tokenChainIdContractDoesNotExist);
+         }
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.d.ts b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.d.ts
+index c2173d4..2c80ab8 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.d.ts
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.d.ts
+@@ -11,6 +11,7 @@ export declare class WETHContract {
+     static RINKEBY(): Token;
+     static GORLI(): Token;
+     static KOVAN(): Token;
++    static POLYGON(): Token;
+     /**
+      * Get WETH token info by chain id
+      * @param chainId The chain id
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.js b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.js
+index c2b081e..98acda3 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.js
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/common/tokens/weth.js
+@@ -57,6 +57,15 @@ var WETHContract = /** @class */ (function () {
+             name: exports.WETH_NAME,
+         };
+     };
++    WETHContract.POLYGON = function () {
++        return {
++            chainId: chain_id_1.ChainId.POLYGON,
++            contractAddress: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
++            decimals: 18,
++            symbol: exports.WETH_SYMBOL,
++            name: exports.WETH_NAME,
++        };
++    };
+     /**
+      * Get WETH token info by chain id
+      * @param chainId The chain id
+@@ -73,6 +82,8 @@ var WETHContract = /** @class */ (function () {
+                 return this.GORLI();
+             case chain_id_1.ChainId.KOVAN:
+                 return this.KOVAN();
++            case chain_id_1.ChainId.POLYGON:
++                return this.POLYGON();
+             default:
+                 throw new uniswap_error_1.UniswapError(chainId + " is not allowed", error_codes_1.ErrorCodes.tokenChainIdContractDoesNotExist);
+         }
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.d.ts b/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.d.ts
+index 84d9b09..de44eeb 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.d.ts
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.d.ts
+@@ -3,6 +3,7 @@ export declare enum ChainId {
+     ROPSTEN = 3,
+     RINKEBY = 4,
+     GÖRLI = 5,
+-    KOVAN = 42
++    KOVAN = 42,
++    POLYGON = 137
+ }
+ export declare const ChainNames: Map<number, string>;
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.js b/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.js
+index e0319dd..3f1f03c 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.js
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/enums/chain-id.js
+@@ -8,6 +8,7 @@ var ChainId;
+     ChainId[ChainId["RINKEBY"] = 4] = "RINKEBY";
+     ChainId[ChainId["G\u00D6RLI"] = 5] = "G\u00D6RLI";
+     ChainId[ChainId["KOVAN"] = 42] = "KOVAN";
++    ChainId[ChainId["POLYGON"] = 137] = "POLYGON";
+ })(ChainId = exports.ChainId || (exports.ChainId = {}));
+ exports.ChainNames = new Map([
+     [ChainId.MAINNET, 'mainnet'],
+@@ -15,4 +16,6 @@ exports.ChainNames = new Map([
+     [ChainId.RINKEBY, 'rinkeby'],
+     [ChainId.GÖRLI, 'görli'],
+     [ChainId.KOVAN, 'kovan'],
++    [ChainId.POLYGON, 'polygon']
+ ]);
++
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/factories/pair/uniswap-pair.js b/node_modules/simple-uniswap-sdk/dist/cjs/factories/pair/uniswap-pair.js
+index 815aaea..e0fbac5 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/factories/pair/uniswap-pair.js
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/factories/pair/uniswap-pair.js
+@@ -104,7 +104,8 @@ var UniswapPair = /** @class */ (function () {
+                             chainId !== chain_id_1.ChainId.ROPSTEN &&
+                             chainId !== chain_id_1.ChainId.RINKEBY &&
+                             chainId !== chain_id_1.ChainId.GÖRLI &&
+-                            chainId !== chain_id_1.ChainId.KOVAN) {
++                            chainId !== chain_id_1.ChainId.KOVAN &&
++                            chainId !== chain_id_1.ChainId.POLYGON) {
+                             throw new uniswap_error_1.UniswapError("ChainId - " + chainId + " is not supported. This lib only supports mainnet(1), ropsten(4), kovan(42), rinkeby(4), g\u00F6rli(5) and ropsten(3)", error_codes_1.ErrorCodes.chainIdNotSupported);
+                         }
+                         tokensFactory = new tokens_factory_1.TokensFactory(this._ethersProvider);
+diff --git a/node_modules/simple-uniswap-sdk/dist/cjs/uniswap-contract-context/uniswap-contract-context-v2.js b/node_modules/simple-uniswap-sdk/dist/cjs/uniswap-contract-context/uniswap-contract-context-v2.js
+index 6341178..0aa0ab3 100644
+--- a/node_modules/simple-uniswap-sdk/dist/cjs/uniswap-contract-context/uniswap-contract-context-v2.js
++++ b/node_modules/simple-uniswap-sdk/dist/cjs/uniswap-contract-context/uniswap-contract-context-v2.js
+@@ -2,32 +2,34 @@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.UniswapContractContextV2 = void 0;
+ var UniswapContractContextV2 = /** @class */ (function () {
+-    function UniswapContractContextV2() {
+-    }
+-    /**
+-     * The uniswap router address
+-     */
+-    UniswapContractContextV2.routerAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
+-    /**
+-     * The uniswap factory address
+-     */
+-    UniswapContractContextV2.factoryAddress = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
+-    /**
+-     * The uniswap pair address
+-     */
+-    UniswapContractContextV2.pairAddress = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
+-    /**
+-     * Uniswap v2 router
+-     */
+-    UniswapContractContextV2.routerAbi = require('../ABI/uniswap-router-v2.json');
+-    /**
+-     * Uniswap v2 factory
+-     */
+-    UniswapContractContextV2.factoryAbi = require('../ABI/uniswap-factory-v2.json');
+-    /**
+-     * Uniswap v2 pair
+-     */
+-    UniswapContractContextV2.pairAbi = require('../ABI/uniswap-pair-v2.json');
+-    return UniswapContractContextV2;
+-}());
++  function UniswapContractContextV2() {}
++  /**
++   * The uniswap router address
++   */
++  UniswapContractContextV2.routerAddress =
++    "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506";
++  /**
++   * The uniswap factory address
++   */
++  UniswapContractContextV2.factoryAddress =
++    "0xc35dadb65012ec5796536bd9864ed8773abc74c4";
++  /**
++   * The uniswap pair address
++   */
++  UniswapContractContextV2.pairAddress =
++    "0xc35dadb65012ec5796536bd9864ed8773abc74c4";
++  /**
++   * Uniswap v2 router
++   */
++  UniswapContractContextV2.routerAbi = require("../ABI/uniswap-router-v2.json");
++  /**
++   * Uniswap v2 factory
++   */
++  UniswapContractContextV2.factoryAbi = require("../ABI/uniswap-factory-v2.json");
++  /**
++   * Uniswap v2 pair
++   */
++  UniswapContractContextV2.pairAbi = require("../ABI/uniswap-pair-v2.json");
++  return UniswapContractContextV2;
++})();
+ exports.UniswapContractContextV2 = UniswapContractContextV2;
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.d.ts b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.d.ts
+index e73f225..5349038 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.d.ts
++++ b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.d.ts
+@@ -15,6 +15,7 @@ export declare class ETH {
+     static RINKEBY(): Token;
+     static GORLI(): Token;
+     static KOVAN(): Token;
++    static POLYGON(): Token;
+     /**
+      * Get ETH token info by chain id
+      * @param chainId The chain id
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.js b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.js
+index 8ee8017..6e32188 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.js
++++ b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/eth.js
+@@ -75,6 +75,15 @@ var ETH = /** @class */ (function () {
+             name: ETH_NAME,
+         };
+     };
++    ETH.POLYGON = function () {
++        return {
++            chainId: ChainId.POLYGON,
++            contractAddress: appendEthToContractAddress('0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'),
++            decimals: 18,
++            symbol: ETH_SYMBOL,
++            name: ETH_NAME,
++        };
++    };
+     /**
+      * Get ETH token info by chain id
+      * @param chainId The chain id
+@@ -91,6 +100,8 @@ var ETH = /** @class */ (function () {
+                 return this.GORLI();
+             case ChainId.KOVAN:
+                 return this.KOVAN();
++            case ChainId.POLYGON:
++                return this.POLYGON();
+             default:
+                 throw new UniswapError(chainId + " is not allowed", ErrorCodes.tokenChainIdContractDoesNotExist);
+         }
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.d.ts b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.d.ts
+index c2173d4..2c80ab8 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.d.ts
++++ b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.d.ts
+@@ -11,6 +11,7 @@ export declare class WETHContract {
+     static RINKEBY(): Token;
+     static GORLI(): Token;
+     static KOVAN(): Token;
++    static POLYGON(): Token;
+     /**
+      * Get WETH token info by chain id
+      * @param chainId The chain id
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.js b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.js
+index 857029e..80453a2 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.js
++++ b/node_modules/simple-uniswap-sdk/dist/esm/common/tokens/weth.js
+@@ -54,6 +54,15 @@ var WETHContract = /** @class */ (function () {
+             name: WETH_NAME,
+         };
+     };
++    WETHContract.POLYGON = function () {
++        return {
++            chainId: ChainId.POLYGON,
++            contractAddress: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
++            decimals: 18,
++            symbol: WETH_SYMBOL,
++            name: WETH_NAME,
++        };
++    };
+     /**
+      * Get WETH token info by chain id
+      * @param chainId The chain id
+@@ -70,6 +79,8 @@ var WETHContract = /** @class */ (function () {
+                 return this.GORLI();
+             case ChainId.KOVAN:
+                 return this.KOVAN();
++            case ChainId.POLYGON:
++                return this.POLYGON();
+             default:
+                 throw new UniswapError(chainId + " is not allowed", ErrorCodes.tokenChainIdContractDoesNotExist);
+         }
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.d.ts b/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.d.ts
+index 84d9b09..de44eeb 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.d.ts
++++ b/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.d.ts
+@@ -3,6 +3,7 @@ export declare enum ChainId {
+     ROPSTEN = 3,
+     RINKEBY = 4,
+     GÖRLI = 5,
+-    KOVAN = 42
++    KOVAN = 42,
++    POLYGON = 137
+ }
+ export declare const ChainNames: Map<number, string>;
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.js b/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.js
+index 5df8e44..2c1792b 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.js
++++ b/node_modules/simple-uniswap-sdk/dist/esm/enums/chain-id.js
+@@ -5,6 +5,7 @@ export var ChainId;
+     ChainId[ChainId["RINKEBY"] = 4] = "RINKEBY";
+     ChainId[ChainId["G\u00D6RLI"] = 5] = "G\u00D6RLI";
+     ChainId[ChainId["KOVAN"] = 42] = "KOVAN";
++    ChainId[ChainId["POLYGON"] = 137] = "POLYGON";
+ })(ChainId || (ChainId = {}));
+ export var ChainNames = new Map([
+     [ChainId.MAINNET, 'mainnet'],
+@@ -12,4 +13,5 @@ export var ChainNames = new Map([
+     [ChainId.RINKEBY, 'rinkeby'],
+     [ChainId.GÖRLI, 'görli'],
+     [ChainId.KOVAN, 'kovan'],
++    [ChainId.POLYGON, 'polygon']
+ ]);
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/factories/pair/uniswap-pair.js b/node_modules/simple-uniswap-sdk/dist/esm/factories/pair/uniswap-pair.js
+index 38ab3a6..e3230f3 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/factories/pair/uniswap-pair.js
++++ b/node_modules/simple-uniswap-sdk/dist/esm/factories/pair/uniswap-pair.js
+@@ -101,7 +101,8 @@ var UniswapPair = /** @class */ (function () {
+                             chainId !== ChainId.ROPSTEN &&
+                             chainId !== ChainId.RINKEBY &&
+                             chainId !== ChainId.GÖRLI &&
+-                            chainId !== ChainId.KOVAN) {
++                            chainId !== ChainId.KOVAN &&
++                            chainId !== ChainId.POLYGON) {
+                             throw new UniswapError("ChainId - " + chainId + " is not supported. This lib only supports mainnet(1), ropsten(4), kovan(42), rinkeby(4), g\u00F6rli(5) and ropsten(3)", ErrorCodes.chainIdNotSupported);
+                         }
+                         tokensFactory = new TokensFactory(this._ethersProvider);
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v2.js b/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v2.js
+index cba25db..9bfe361 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v2.js
++++ b/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v2.js
+@@ -1,30 +1,29 @@
+ var UniswapContractContextV2 = /** @class */ (function () {
+-    function UniswapContractContextV2() {
+-    }
++  function UniswapContractContextV2() {}
+     /**
+      * The uniswap router address
+      */
+-    UniswapContractContextV2.routerAddress = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
++    UniswapContractContextV2.routerAddress = '0x1b02da8cb0d097eb8d57a175b88c7d8b47997506';
+     /**
+-     * The uniswap factory address
+-     */
+-    UniswapContractContextV2.factoryAddress = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
+-    /**
+-     * The uniswap pair address
+-     */
+-    UniswapContractContextV2.pairAddress = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f';
+-    /**
+-     * Uniswap v2 router
+-     */
+-    UniswapContractContextV2.routerAbi = require('../ABI/uniswap-router-v2.json');
+-    /**
+-     * Uniswap v2 factory
+-     */
+-    UniswapContractContextV2.factoryAbi = require('../ABI/uniswap-factory-v2.json');
++      * The uniswap factory address
++      */
++    UniswapContractContextV2.factoryAddress = '0xc35dadb65012ec5796536bd9864ed8773abc74c4';
+     /**
+-     * Uniswap v2 pair
+-     */
+-    UniswapContractContextV2.pairAbi = require('../ABI/uniswap-pair-v2.json');
+-    return UniswapContractContextV2;
+-}());
++      * The uniswap pair address
++      */
++    UniswapContractContextV2.pairAddress = '0xc35dadb65012ec5796536bd9864ed8773abc74c4';
++  /**
++   * Uniswap v2 router
++   */
++  UniswapContractContextV2.routerAbi = require("../ABI/uniswap-router-v2.json");
++  /**
++   * Uniswap v2 factory
++   */
++  UniswapContractContextV2.factoryAbi = require("../ABI/uniswap-factory-v2.json");
++  /**
++   * Uniswap v2 pair
++   */
++  UniswapContractContextV2.pairAbi = require("../ABI/uniswap-pair-v2.json");
++  return UniswapContractContextV2;
++})();
+ export { UniswapContractContextV2 };
+diff --git a/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v3.js b/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v3.js
+index 09d4b9f..82bc71d 100644
+--- a/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v3.js
++++ b/node_modules/simple-uniswap-sdk/dist/esm/uniswap-contract-context/uniswap-contract-context-v3.js
+@@ -1,30 +1,32 @@
+ var UniswapContractContextV3 = /** @class */ (function () {
+-    function UniswapContractContextV3() {
+-    }
+-    /**
+-     * The uniswap router address
+-     */
+-    UniswapContractContextV3.routerAddress = '0xE592427A0AEce92De3Edee1F18E0157C05861564';
+-    /**
+-     * The uniswap factory address
+-     */
+-    UniswapContractContextV3.factoryAddress = '0x1F98431c8aD98523631AE4a59f267346ea31F984';
+-    /**
+-     * The uniswap quoter address
+-     */
+-    UniswapContractContextV3.quoterAddress = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6';
+-    /**
+-     * Uniswap router
+-     */
+-    UniswapContractContextV3.routerAbi = require('../ABI/uniswap-router-v3.json');
+-    /**
+-     * Uniswap factory
+-     */
+-    UniswapContractContextV3.factoryAbi = require('../ABI/uniswap-factory-v3.json');
+-    /**
+-     * Uniswap quoter
+-     */
+-    UniswapContractContextV3.quoterAbi = require('../ABI/uniswap-quoter-v3.json');
+-    return UniswapContractContextV3;
+-}());
++  function UniswapContractContextV3() {}
++  /**
++   * The uniswap router address
++   */
++  UniswapContractContextV3.routerAddress =
++    "0xE592427A0AEce92De3Edee1F18E0157C05861564";
++  /**
++   * The uniswap factory address
++   */
++  UniswapContractContextV3.factoryAddress =
++    "0x1F98431c8aD98523631AE4a59f267346ea31F984";
++  /**
++   * The uniswap quoter address
++   */
++  UniswapContractContextV3.quoterAddress =
++    "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6";
++  /**
++   * Uniswap router
++   */
++  UniswapContractContextV3.routerAbi = require("../ABI/uniswap-router-v3.json");
++  /**
++   * Uniswap factory
++   */
++  UniswapContractContextV3.factoryAbi = require("../ABI/uniswap-factory-v3.json");
++  /**
++   * Uniswap quoter
++   */
++  UniswapContractContextV3.quoterAbi = require("../ABI/uniswap-quoter-v3.json");
++  return UniswapContractContextV3;
++})();
+ export { UniswapContractContextV3 };
