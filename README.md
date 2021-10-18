@@ -48,6 +48,14 @@ contract Tester is ERC20 {
 3. Run the sniper (`npm run start`)
 4. Create a new UniswapV2-styled pool with deployed ERC20 and base chain asset (eg. ETH/Matic) and watch your sniper pick up the new pool creation
 
+## Disclaimers
+
+1. This code is manually tested and unaudited. Proceed with caution.
+2. The sniper does not perform any cost checks. Ideally, you implement a maximum clearing price above which you no longer send a purchase transaction.
+3. This sniper checks for confirmed transactions (and thus, emitted events). For better performance, you can try to watch the mempool for the unconfirmed pool creation transaction, or run the purchase submission on loop and bite the minimal revert cost on Polygon.
+4. In the case where a pool operator adds minimal liquidity to begin and follows it up with more in another block, the sniper will pounce at the opportunity to buy regardless. Use safe slippage measures and add error handling.
+5. Be careful to not purchase a malicious token.
+
 ## License
 
 Unlicense
