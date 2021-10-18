@@ -50,4 +50,4 @@ contract Tester is ERC20 {
 
 ## License
 
-Unlicense
+[Unlicense](https://github.com/Anish-Agnihotri/pool-sniper/blob/master/LICENSE)
