@@ -12,8 +12,11 @@ Credits: [@joshstevens19](https://github.com/joshstevens19) for [simple-uniswap-
 # Clone repo
 git clone https://github.com/anish-agnihotri/pool-sniper
 
-# Install dependencies (and apply postinstall script)
+# Install dependencies
 npm install
+
+# Re-run post install (just in case, see issue #1)
+npm run postinstall
 
 # Update environment variables
 cp .env.sample > .env
