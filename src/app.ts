@@ -1,5 +1,5 @@
-import Sniper from "./sniper"; // Sniper
 import * as dotenv from "dotenv"; // Environment variables
+import Sniper from "./sniper"; // Sniper
 
 // Setup env
 dotenv.config();
@@ -26,6 +26,11 @@ dotenv.config();
     throw new Error("Missing necessary parameters");
   }
 
+  let IS_TESTNET = false;
+  if (process.env.TESTNET) {
+    IS_TESTNET = Boolean(process.env.IS_TESTNET);
+  }
+
   // Initialize sniper
   const sniper = new Sniper(
     tokenAddress,
@@ -34,7 +39,8 @@ dotenv.config();
     privateKey,
     purchaseAmount,
     gasPrice,
-    slippage
+    slippage,
+    IS_TESTNET
   );
   // Wait and snipe pool
   await sniper.snipe();

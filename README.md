@@ -28,7 +28,7 @@ npm run start
 
 ## Local testing
 
-The Polygon patch is automatically applied `postinstall`. You can remove this and update `src/sniper.ts:L73` to test against a testnet.
+The Polygon mainnet is defined in the sniper code. You can use polygon testnet by turning `IS_TESTNET` to `true` in your `.env`.
 
 The easiest way to test locally is:
 
