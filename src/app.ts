@@ -26,9 +26,9 @@ dotenv.config();
     throw new Error("Missing necessary parameters");
   }
 
-  let IS_TESTNET = false;
+  let isTestnet = false;
   if (process.env.TESTNET) {
-    IS_TESTNET = Boolean(process.env.IS_TESTNET);
+    isTestnet = Boolean(process.env.IS_TESTNET);
   }
 
   // Initialize sniper
@@ -40,7 +40,7 @@ dotenv.config();
     purchaseAmount,
     gasPrice,
     slippage,
-    IS_TESTNET
+    isTestnet
   );
   // Wait and snipe pool
   await sniper.snipe();
