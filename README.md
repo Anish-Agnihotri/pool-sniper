@@ -28,7 +28,7 @@ npm run start
 
 ## Local testing
 
-The Polygon mainnet is defined in the sniper code. You can use polygon testnet by turning `IS_TESTNET` to `true` in your `.env`.
+The Polygon mainnet is defined in the sniper code. You can use polygon testnet by turning `IS_TESTNET` to `true` in your `.env`. Please note your `RPC_ENDPOINT` to be a testnet node.
 
 The easiest way to test locally is:
 
