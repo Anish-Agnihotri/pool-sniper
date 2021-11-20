@@ -1,5 +1,5 @@
-import Sniper from "./sniper"; // Sniper
 import * as dotenv from "dotenv"; // Environment variables
+import Sniper from "./sniper"; // Sniper
 
 // Setup env
 dotenv.config();
@@ -20,6 +20,8 @@ dotenv.config();
   const gasPrice: string = process.env.GAS_PRICE ?? "2000"; // 2,000 gwei
   // Slippage tolerance
   const slippage: number = Number(process.env.SLIPPAGE) ?? 0.1; // 10%
+  // Testnet?
+  const testnet: boolean = Boolean(process.env.TESTNET) ?? false;
 
   // Throw if missing necessary params
   if (!tokenAddress || !privateKey || !factoryAddress) {
@@ -34,7 +36,8 @@ dotenv.config();
     privateKey,
     purchaseAmount,
     gasPrice,
-    slippage
+    slippage,
+    testnet
   );
   // Wait and snipe pool
   await sniper.snipe();

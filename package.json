@@ -4,7 +4,6 @@
   "description": "Snipes Uniswap V2 pools on creation",
   "main": "dist/app.js",
   "scripts": {
-    "postinstall": "patch-package",
     "dev": "ts-node src/app.ts",
     "start": "tsc && node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,6 +32,6 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "ethers": "^5.4.7",
-    "simple-uniswap-sdk": "^3.4.2"
+    "simple-uniswap-sdk": "^3.6.2"
   }
 }

@@ -1,13 +1,12 @@
 import {
+  TradeDirection,
   UniswapPair,
-  UniswapVersion,
-  ETH,
   UniswapPairSettings,
-  TradeDirection
+  UniswapVersion
 } from "simple-uniswap-sdk"; // Simple Uniswap Trades
 import { logger } from "./utils/logging"; // Logging
 import { ABI_UniswapV2Factory } from "./utils/constants"; // ABIs
-import { providers, Wallet, utils, BigNumber, Contract } from "ethers"; // Ethers
+import { BigNumber, Contract, providers, utils, Wallet } from "ethers"; // Ethers
 
 export default class Sniper {
   // Ethers provider
@@ -25,6 +24,8 @@ export default class Sniper {
   gasPrice: BigNumber;
   // Max trade slippage
   slippage: number;
+  // Running against testnet
+  testnet: boolean;
 
   /**
    * Updates token and purchase details + sets up RPC
@@ -35,6 +36,7 @@ export default class Sniper {
    * @param {string} purchaseAmount to swap with (input)
    * @param {string} gasPrice to pay
    * @param {number} slippage for trade execution
+   * @param {boolean} testnet true if testnet
    */
   constructor(
     tokenAddress: string,
@@ -43,7 +45,8 @@ export default class Sniper {
     privateKey: string,
     purchaseAmount: string,
     gasPrice: string,
-    slippage: number
+    slippage: number,
+    testnet: boolean
   ) {
     // Setup networking + wallet
     this.rpc = new providers.JsonRpcProvider(rpcEndpoint);
@@ -55,6 +58,7 @@ export default class Sniper {
     this.purchaseAmount = purchaseAmount;
     this.gasPrice = utils.parseUnits(gasPrice, "gwei");
     this.slippage = slippage;
+    this.testnet = testnet;
   }
 
   /**
@@ -70,7 +74,7 @@ export default class Sniper {
     // Generate Uniswap pair
     const pair = new UniswapPair({
       // Base chain token to convert from
-      fromTokenContractAddress: ETH.POLYGON().contractAddress,
+      fromTokenContractAddress: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
       // Desired token to purchase
       toTokenContractAddress: desiredTokenAddress,
       // Ethereum address of user
@@ -80,7 +84,31 @@ export default class Sniper {
         slippage: this.slippage, // Slippage config
         deadlineMinutes: 5, // 5m max execution deadline
         disableMultihops: false, // Allow multihops
-        uniswapVersions: [UniswapVersion.v2] // Only V2
+        uniswapVersions: [UniswapVersion.v2], // Only V2
+        cloneUniswapContractDetails: {
+          v2Override: {
+            routerAddress: "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506",
+            factoryAddress: "0xc35dadb65012ec5796536bd9864ed8773abc74c4",
+            pairAddress: "0xc35dadb65012ec5796536bd9864ed8773abc74c4"
+          }
+        },
+        customNetwork: {
+          nameNetwork: !this.testnet ? "polygon" : "mumbai",
+          multicallContractAddress: !this.testnet
+            ? "0x275617327c958bD06b5D6b871E7f491D76113dd8"
+            : "0xe9939e7Ea7D7fb619Ac57f648Da7B1D425832631",
+          nativeCurrency: {
+            name: "Matic Token",
+            symbol: "MATIC"
+          },
+          nativeWrappedTokenInfo: {
+            chainId: !this.testnet ? 137 : 80001,
+            contractAddress: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+            decimals: 18,
+            symbol: "WMATIC",
+            name: "Wrapped Matic"
+          }
+        }
       })
     });
 
