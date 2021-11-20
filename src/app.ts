@@ -20,15 +20,12 @@ dotenv.config();
   const gasPrice: string = process.env.GAS_PRICE ?? "2000"; // 2,000 gwei
   // Slippage tolerance
   const slippage: number = Number(process.env.SLIPPAGE) ?? 0.1; // 10%
+  // Testnet?
+  const testnet: boolean = Boolean(process.env.TESTNET) ?? false;
 
   // Throw if missing necessary params
   if (!tokenAddress || !privateKey || !factoryAddress) {
     throw new Error("Missing necessary parameters");
-  }
-
-  let isTestnet = false;
-  if (process.env.TESTNET) {
-    isTestnet = Boolean(process.env.IS_TESTNET);
   }
 
   // Initialize sniper
@@ -40,7 +37,7 @@ dotenv.config();
     purchaseAmount,
     gasPrice,
     slippage,
-    isTestnet
+    testnet
   );
   // Wait and snipe pool
   await sniper.snipe();

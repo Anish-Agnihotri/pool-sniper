@@ -1,12 +1,12 @@
-import { BigNumber, Contract, providers, utils, Wallet } from "ethers"; // Ethers
 import {
   TradeDirection,
   UniswapPair,
   UniswapPairSettings,
   UniswapVersion
 } from "simple-uniswap-sdk"; // Simple Uniswap Trades
-import { ABI_UniswapV2Factory } from "./utils/constants"; // ABIs
 import { logger } from "./utils/logging"; // Logging
+import { ABI_UniswapV2Factory } from "./utils/constants"; // ABIs
+import { BigNumber, Contract, providers, utils, Wallet } from "ethers"; // Ethers
 
 export default class Sniper {
   // Ethers provider
@@ -24,8 +24,8 @@ export default class Sniper {
   gasPrice: BigNumber;
   // Max trade slippage
   slippage: number;
-  // if its a testnet
-  testNet: boolean;
+  // Running against testnet
+  testnet: boolean;
 
   /**
    * Updates token and purchase details + sets up RPC
@@ -36,7 +36,7 @@ export default class Sniper {
    * @param {string} purchaseAmount to swap with (input)
    * @param {string} gasPrice to pay
    * @param {number} slippage for trade execution
-   * @param {boolean} testNet if its a testnet
+   * @param {boolean} testnet true if testnet
    */
   constructor(
     tokenAddress: string,
@@ -46,7 +46,7 @@ export default class Sniper {
     purchaseAmount: string,
     gasPrice: string,
     slippage: number,
-    testNet: boolean
+    testnet: boolean
   ) {
     // Setup networking + wallet
     this.rpc = new providers.JsonRpcProvider(rpcEndpoint);
@@ -58,7 +58,7 @@ export default class Sniper {
     this.purchaseAmount = purchaseAmount;
     this.gasPrice = utils.parseUnits(gasPrice, "gwei");
     this.slippage = slippage;
-    this.testNet = testNet;
+    this.testnet = testnet;
   }
 
   /**
@@ -93,8 +93,8 @@ export default class Sniper {
           }
         },
         customNetwork: {
-          nameNetwork: !this.testNet ? "polygon" : "mumbai",
-          multicallContractAddress: !this.testNet
+          nameNetwork: !this.testnet ? "polygon" : "mumbai",
+          multicallContractAddress: !this.testnet
             ? "0x275617327c958bD06b5D6b871E7f491D76113dd8"
             : "0xe9939e7Ea7D7fb619Ac57f648Da7B1D425832631",
           nativeCurrency: {
@@ -102,7 +102,7 @@ export default class Sniper {
             symbol: "MATIC"
           },
           nativeWrappedTokenInfo: {
-            chainId: !this.testNet ? 137 : 80001,
+            chainId: !this.testnet ? 137 : 80001,
             contractAddress: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
             decimals: 18,
             symbol: "WMATIC",
